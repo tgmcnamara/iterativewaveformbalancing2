@@ -10,8 +10,8 @@ baseMVA = 100; %??
 
 %parse all the case data with models
 %maybe use power flow models to define Y bus
-% mpc = loadcase('twobus_transient.m');
-mpc = loadcase('twobus_transient_no_caps.m');
+mpc = loadcase('twobus_transient.m');
+% mpc = loadcase('twobus_transient_no_caps.m');
 %mpc = load('mpc_two_bus.mat').mpc;
 node_idx = 0;
 
@@ -31,6 +31,7 @@ node_idx = 0;
 
 
 %V = zeros(nNodes);
+% [Vn, Vb, Ib] = waveform_init_2_bus_no_caps(t, buses, linear_devices, nonlinear_devices, Ibranch_idx, Vbranch_idx, Vnode_idx);
 [Vn, Vb, Ib] = waveform_init_2_bus(t, buses, linear_devices, nonlinear_devices, Ibranch_idx, Vbranch_idx, Vnode_idx);
 V_init = [Ib; Vb; Vn];
 
@@ -56,6 +57,8 @@ while max_err> tol
     Ib_sol = Vwvform(1:Ibranch_idx,:);
     Vb_sol = Vwvform((Ibranch_idx+1):(Ibranch_idx+Vbranch_idx),:);
     Vn_sol = Vwvform((Ibranch_idx+Vbranch_idx+1):end,:);
+    Vloop1 = -Vb(12,:) + Vb(1,:) + Vb(15,:);
+    Vloop2 = -Vb_sol(12,:) + Vb_sol(1,:) + Vb_sol(15,:);
     
         %[Iload_wvform, Igen_wvform, Isc_wvform] = calc_Iwvform_14_bus(V_wform, mpc, event_window);
         

@@ -32,13 +32,12 @@ node_idx = 0;
 
 %V = zeros(nNodes);
 % [Vn, Vb, Ib] = waveform_init_2_bus_no_caps(t, buses, linear_devices, nonlinear_devices, Ibranch_idx, Vbranch_idx, Vnode_idx);
-[Vn, Vb, Ib] = waveform_init_2_bus(t, buses, linear_devices, nonlinear_devices, Ibranch_idx, Vbranch_idx, Vnode_idx);
-V_init = [Ib; Vb; Vn];
+[Vn_init, Vb_init, Ib_init] = waveform_init_2_bus(t, buses, linear_devices, nonlinear_devices, Ibranch_idx, Vbranch_idx, Vnode_idx);
+V_init = [Ib_init; Vb_init; Vn_init];
 
 Vprev = V_init;
-Vwvform = Vprev;
 max_err = 10;
-tol = 1e-4; 
+tol = 1e-4;
 
 nl_row = zeros();
 nl_col = zeros();
@@ -48,11 +47,11 @@ nl_val = zeros();
 Y_sparse = create_Ylinear(a_row, a_col, a_val, a_idx, bcr_row, bcr_col, bcr_val, bcr_idx,Ibranch_idx, Vbranch_idx, Vnode_idx );
 
 iteration = 0;
+figure(1)
 while max_err> tol
     iteration = iteration+1;
-    Vn = Vwvform((Ibranch_idx+Vbranch_idx+1):end,:);
-    nonlinear_devices = run_nonlinear_device_simulations(nonlinear_devices, Vn, t); 
-    Vprev = Vwvform;
+    Vn_prev = Vprev((Ibranch_idx+Vbranch_idx+1):end,:);
+    nonlinear_devices = run_nonlinear_device_simulations(nonlinear_devices, Vn_prev, t); 
     Vwvform = calc_Vwvform(Y_sparse,Vprev, t, delta_t ,buses, linear_devices, nonlinear_devices, Ibranch_idx, Vbranch_idx, Vnode_idx);
     Ib_sol = Vwvform(1:Ibranch_idx,:);
     Vb_sol = Vwvform((Ibranch_idx+1):(Ibranch_idx+Vbranch_idx),:);
@@ -77,8 +76,8 @@ while max_err> tol
 %         
 %     end
     V_error = abs(Vwvform-Vprev);
-    max_err = max(V_error(:));%calcMaxError(Vwvform, Vprev);
-    V = Vwvform;
+    max_err = calcMaxErr(Vwvform, Vprev);
+    Vprev = Vwvform;
 end
 
 

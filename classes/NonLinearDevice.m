@@ -83,7 +83,7 @@ classdef NonLinearDevice < matlab.mixin.Heterogeneous
             Vb = V_wave(2,:);
             Vc = V_wave(3,:);
             in = obj.sim_instance.setExternalInput([t', Va', Vb', Vc']);
-            %in.setBlockParameter(obj.sim_model_file, 'StopTime', max(t));
+            in = in.setModelParameter('StartTime', num2str(min(t)), 'StopTime', num2str(max(t)));
 
             % out = sim(obj.sim_instance);
             % Iwave = out.yout{1}.Values.Data';

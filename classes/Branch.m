@@ -283,7 +283,7 @@ classdef Branch
             %stamp from ground capacitor
             ylin_row = [ylin_row, obj.cgndfr_bcr_row];
             ylin_col = [ylin_col, obj.Ib_cg_fr];
-            ylin_val = [ylin_val, 0.5*(delta_t./obj.Cground)];
+            ylin_val = [ylin_val, (delta_t./obj.Cground)];
             
             ylin_row = [ylin_row, obj.cgndfr_bcr_row];
             ylin_col = [ylin_col, obj.Vb_cg_fr+obj.bcr_vb_offset];

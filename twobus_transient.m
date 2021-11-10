@@ -29,13 +29,13 @@ mpc.bus = [
 %load data
 % bus Type Configuration Pl Qind Qcap 
 mpc.load = [
-    2   2   1   26.04e10    15.24e10    0;
+    2   2   1   160e6    100e6    0;
 ];
 % generator data
 %	bus	Type Configuration Active_Power Reactive_Power Max_Q Min_Q
 %	Source_resistance Source_Inductance Base_V
 mpc.gen = [
-    1   3    3    163e6   0   inf   -inf   0.8929  16.58e-3    146.28e3;
+    1   1    3    163e6   0   inf   -inf   0.8929  16.58e-3    146.28e3;
 ];
 
 %synchronous condenser data
